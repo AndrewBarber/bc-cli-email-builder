@@ -5,22 +5,28 @@ import dotenv from "dotenv";
 import { messages, log } from "../../messages";
 dotenv.config();
 
-const bcClient = new Management.Client({
+const BCClient = new Management.Client({
   accessToken: process.env.BC_ACCESS_TOKEN as string,
   storeHash: process.env.BC_STORE_HASH as string,
 });
+
+const BC_CHANNEL_ID = process.env.BC_CHANNEL_ID || 1;
 
 const downloadEmailTemplate = async (templateName: string, path: string, overwrite: false) => {
   try {
     const isFetchAll = templateName === "all";
 
     if (isFetchAll) {
-      const emailTemplatesResponse = await getAllEmailTemplates(bcClient);
+      const emailTemplatesResponse = await getAllEmailTemplates(BCClient, {
+        channel_id: BC_CHANNEL_ID,
+      });
       if (!emailTemplatesResponse) return log.error(messages.noEmailTemplateFound(templateName));
     }
 
     if (!isFetchAll) {
-      const emailTemplateResponse = await getEmailTemplate(bcClient, templateName);
+      const emailTemplateResponse = await getEmailTemplate(BCClient, templateName, {
+        channel_id: BC_CHANNEL_ID,
+      });
       if (!emailTemplateResponse) return log.error(messages.noEmailTemplateFound(templateName));
 
       // create a directory for the email template
