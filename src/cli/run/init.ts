@@ -9,7 +9,6 @@ import chalk from 'chalk';
 
 import generate from '../../services/auth/generate';
 
-
 const configQuestionnaire = [
   {
     type: 'input',
@@ -25,6 +24,23 @@ const configQuestionnaire = [
     type: 'input',
     name: 'storeHash',
     message: 'What is the Store Hash?',
+  },
+  {
+    type: 'input',
+    name: 'channelId',
+    message: 'What is the Channel ID? Note: Global applies to all storefronts',
+    default: 'Global',
+    validate(value: string) {
+      if (value === 'Global') {
+        return true;
+      }
+
+      if (isNaN(Number(value))) {
+        return 'Please enter a valid number';
+      }
+
+      return true;
+    },
   },
 ];
 
@@ -42,6 +58,7 @@ This guide will help you get your environment set up.
 
 Before continuing, please make sure you've created or received a Store API account.
 You'll need those credentials in order to generate the appropriate configurations.
+The scope you'll need is: Information & Settings (Modify). 	
 You can find more information here. https://support.bigcommerce.com/s/article/Store-API-Accounts#creating
 `);
       inquirer
@@ -72,7 +89,7 @@ Please re-run the init walk through when you are ready!
 
           inquirer
             .prompt(configQuestionnaire)
-            .then((answers) => {
+            .then(answers => {
               generate.configurations(answers);
             })
             .catch((error: any) => {

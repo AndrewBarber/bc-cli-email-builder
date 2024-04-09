@@ -1,4 +1,3 @@
-import downloadEmailTemplate from './download';
+import download from './download';
 
-
-export default downloadEmailTemplate;
+export default download;

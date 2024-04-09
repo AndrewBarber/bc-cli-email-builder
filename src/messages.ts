@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk from 'chalk';
 
 function f(message: string) {
   return `[${new Date().toISOString()}] ${message}`;
@@ -15,9 +15,15 @@ export const log = {
 /* eslint-enable no-console */
 export const messages = {
   invalidAuth: (configKey: string) => `${configKey} is invalid.`,
-  invalidEmailTemplateType: (templateName: string) => `Invalid email template type - ${templateName}.`,
+  invalidEmailTemplateType: (templateName: string) =>
+    `Invalid email template type - ${templateName}.`,
   emailTemplateExists: (templateName: string) =>
     `Email template (${templateName}) already exists. Please supply with overwrite flag if you want to overwrite it.`,
-  noEmailTemplateFound: (templateName: string) => `No email template found - ${templateName}.`,
+  noEmailTemplateFound: (templateName: string) =>
+    `No email template found - ${templateName}.`,
+  downloadedEmailTemplate: (templateName: string, path: string) =>
+    `Downloaded email template - ${templateName}. Path: ${path}`,
+  emailTemplateDoesNotExists: (templateName: string) =>
+    `Email template (${templateName}) does not exist.`,
 };
 /* eslint-enable max-len */
