@@ -13,22 +13,18 @@ const bcClient = new Management.Client({
 });
 
 const downloadEmailTemplate = async (templateName: string, path: string, overwrite: false) => {
-
     try{
-        
         const isFetchAll = templateName === 'all';
 
         if(isFetchAll){
             const emailTemplatesResponse = await getAllEmailTemplates(bcClient);
-            if(!emailTemplatesResponse) return log.error('No email templates found');
-
-            
+            if(!emailTemplatesResponse) return log.error(messages.noEmailTemplateFound);
 
         }
 
         if(!isFetchAll){
             const emailTemplateResponse = await getEmailTemplate(bcClient, templateName);
-            if(!emailTemplateResponse) return log.error('No email templates found');
+            if(!emailTemplateResponse) return log.error(messages.noEmailTemplateFound);
 
             // create a directory for the email template
             // structure will be like this: path/templateName/
@@ -47,7 +43,7 @@ const downloadEmailTemplate = async (templateName: string, path: string, overwri
         }
 
     } catch (error) {
-        console.error(error);
+        log.error(error);
 
     }
 

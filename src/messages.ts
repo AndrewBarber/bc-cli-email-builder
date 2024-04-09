@@ -17,5 +17,6 @@ export const messages = {
     invalidAuth: (configKey: string) => `${configKey} is invalid.`,
     invalidEmailTemplateType: 'Invalid email template type.',
     emailTemplateExists: 'Email template already exists. Please supply with overtwrite flag if you want to overwrite it.',
+    noEmailTemplateFound: 'No email template found.',
 };
 /* eslint-enable max-len */
