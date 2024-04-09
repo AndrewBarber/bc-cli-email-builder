@@ -1,0 +1,99 @@
+{
+    "parser": "@babel/eslint-parser",
+    "root": true,
+    "rules": {
+      "no-alert": 0,
+      "consistent-return": 0,
+      "max-len": 0,
+      "import/first": 0,
+      "no-mixed-operators": 0,
+      "class-methods-use-this": 0,
+      "no-template-curly-in-string": 0,
+      "no-underscore-dangle": 0,
+      "prefer-spread": 0,
+      "no-plusplus": 0,
+      "no-restricted-syntax": 0,
+      "no-prototype-builtins": 0,
+      "no-useless-escape": 0,
+      "global-require": 0,
+      "newline-per-chained-call": 0,
+      "arrow-parens": 0,
+      "prefer-destructuring": 0,
+      "import/no-named-as-default": 0,
+      "import/no-named-as-default-member": 0,
+      "import/prefer-default-export": "off",
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "never",
+          "ts": "never",
+          "mjs": "never",
+          "jsx": "never",
+          "tsx": "never",
+        },
+      ],
+      "react/jsx-filename-extension": [
+        "error",
+        { "extensions": [".jsx", ".tsx"] },
+      ],
+      "react/function-component-definition": [
+        "error",
+        {
+          "namedComponents": ["function-declaration", "arrow-function"],
+          "unnamedComponents": "function-expression",
+        },
+      ],
+      "unicorn/prevent-abbreviations": [
+        "error",
+        {
+          "allowList": {
+            "Props": true,
+          },
+          "replacements": {
+            "cxt": {
+              "context": true,
+            },
+          },
+        },
+      ],
+      "unicorn/prefer-node-protocol": ["off"],
+      "unicorn/no-array-for-each": ["off"],
+      "no-secrets/no-secrets": "error",
+    },
+    "globals": {
+      "$": true,
+      "jQuery": true,
+    },
+    "env": {
+      "es6": true,
+      "browser": true,
+      "jest/globals": true,
+    },
+    "extends": [
+      "eslint-config-airbnb",
+      "prettier",
+      "plugin:import/recommended",
+      "plugin:markdown/recommended",
+    ],
+    "plugins": ["no-secrets", "jest", "sonarjs"],
+    "settings": {
+      "react": {
+        "version": "detect",
+      },
+      "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".jsx", ".json", ".tsx", ".ts"],
+        },
+      },
+    },
+    "overrides": [
+      {
+        "files": ["*.js"],
+        "rules": {
+          "unicorn/filename-case": ["error", { "cases": { "kebabCase": true } }],
+        },
+      },
+    ],
+  }
