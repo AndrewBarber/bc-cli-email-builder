@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { messages, log } from "../../messages";
 dotenv.config();
 
-const BCClient = new Management.Client({
+const bcClient = new Management.Client({
   accessToken: process.env.BC_ACCESS_TOKEN as string,
   storeHash: process.env.BC_STORE_HASH as string,
 });
@@ -17,36 +17,39 @@ const downloadEmailTemplate = async (templateName: string, path: string, overwri
     const isFetchAll = templateName === "all";
 
     if (isFetchAll) {
-      const emailTemplatesResponse = await getAllEmailTemplates(BCClient, {
+      const emailTemplatesResponse = await getAllEmailTemplates(bcClient, {
         channel_id: BC_CHANNEL_ID,
       });
       if (!emailTemplatesResponse) return log.error(messages.noEmailTemplateFound(templateName));
+
+      await Promise.all(emailTemplatesResponse.map((emailTemplate) => saveEmailTemplate(emailTemplate.type_id, path, emailTemplate)));
     }
 
     if (!isFetchAll) {
-      const emailTemplateResponse = await getEmailTemplate(BCClient, templateName, {
+      const emailTemplateResponse = await getEmailTemplate(bcClient, templateName, {
         channel_id: BC_CHANNEL_ID,
       });
       if (!emailTemplateResponse) return log.error(messages.noEmailTemplateFound(templateName));
 
-      // create a directory for the email template
-      // structure will be like this: path/templateName/
-
-      const emailTemplateDir = `${path}/${templateName}`;
-      if (fs.existsSync(emailTemplateDir) && !overwrite) {
-        return log.error(messages.emailTemplateExists);
-      }
-      fs.mkdirSync(emailTemplateDir, { recursive: true });
-
-      // write the email template to a file
-      await Promise.all([
-        fs.writeFileSync(`${emailTemplateDir}/${templateName}.json`, JSON.stringify(omit(emailTemplateResponse, "body"))),
-        fs.writeFileSync(`${emailTemplateDir}/${templateName}.hbs`, emailTemplateResponse.body),
-      ]);
+      await saveEmailTemplate(templateName, path, emailTemplateResponse);
     }
   } catch (error) {
     log.error(error);
   }
+};
+
+const saveEmailTemplate = async (templateName: string, path: string, emailTemplateResponse: any) => {
+  const emailTemplateDir = `${path}/${templateName}`;
+  if (fs.existsSync(emailTemplateDir) && !overwrite) {
+    return log.error(messages.emailTemplateExists);
+  }
+  fs.mkdirSync(emailTemplateDir, { recursive: true });
+
+  // write the email template to a file
+  await Promise.all([
+    fs.writeFileSync(`${emailTemplateDir}/${templateName}.json`, JSON.stringify(omit(emailTemplateResponse, "body"))),
+    fs.writeFileSync(`${emailTemplateDir}/${templateName}.hbs`, emailTemplateResponse.body),
+  ]);
 };
 
 const getAllEmailTemplates = async (
